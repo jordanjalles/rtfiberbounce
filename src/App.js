@@ -1,7 +1,7 @@
 import React from "react";
 import {Canvas} from "@react-three/fiber";
 import {OrbitControls, Stars} from "@react-three/drei";
-import {Physics, useBox, usePlane} from "@react-three/cannon";
+import {Physics, useBox, useSphere, usePlane} from "@react-three/cannon";
 import "./index.css";
 
 function Box(){
@@ -18,6 +18,23 @@ function Box(){
     </mesh>
   );
 }
+
+//react function that creates a sphere with physics
+function Sphere(){
+  const [ref, api] = useSphere(() => ({mass: 1, position: [2., 1., 0]}));
+
+  return(
+    <mesh onClick={() => {
+      api.velocity.set(0, 2, 0);
+    }}
+    
+    ref={ref} position={[0, 1., 0]}>
+      <sphereBufferGeometry attach="geometry"/>
+      <meshLambertMaterial attach="material" color="yellow"/>
+    </mesh>
+  );
+}
+
 
 function Ground(){
   const ref = usePlane(() => ({
@@ -44,6 +61,7 @@ function App() {
       />
       <Physics>
         <Box/>  
+        <Sphere/>
         <Ground />
       </Physics>
       <Stars />
